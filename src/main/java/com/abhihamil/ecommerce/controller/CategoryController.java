@@ -2,6 +2,7 @@ package com.abhihamil.ecommerce.controller;
 
 import com.abhihamil.ecommerce.model.Category;
 import com.abhihamil.ecommerce.service.CategoryService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,25 +12,26 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api")
 public class CategoryController {
 
     @Autowired
     private CategoryService categoryService;
 
 
-    @GetMapping("/api/public/categories")
+    @GetMapping("/public/categories")
     public ResponseEntity<List<Category>> getAllCategories() {
         List<Category> categories = categoryService.getAllCategories();
         return new ResponseEntity<>(categories, HttpStatus.OK);
     }
 
-    @PostMapping("/api/public/categories")
-    public ResponseEntity<String> createCategory(@RequestBody Category category) {
+    @PostMapping("/public/categories")
+    public ResponseEntity<String> createCategory(@Valid @RequestBody Category category) {
         categoryService.createCategory(category);
         return new ResponseEntity<>("Category created!!!", HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/api/admin/categories/{categoryId}")
+    @DeleteMapping("/admin/categories/{categoryId}")
     public ResponseEntity<String> deleteCategory(@PathVariable Long categoryId) {
         try {
             String status = categoryService.deleteCategory(categoryId);
@@ -40,7 +42,7 @@ public class CategoryController {
         }
     }
 
-    @PutMapping("/api/public/categories/{categoryId}")
+    @PutMapping("/public/categories/{categoryId}")
     public ResponseEntity<Category> updateCategory(@RequestBody Category category, @PathVariable Long categoryId) {
 
         Category updateCategory = categoryService.updateCategory(category, categoryId);
