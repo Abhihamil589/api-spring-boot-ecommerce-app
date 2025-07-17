@@ -1,7 +1,5 @@
 package com.abhihamil.ecommerce.exceptions;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -26,5 +24,12 @@ public class MyGlobalExceptionHandler {
                     errorsMap.put(fieldName, error.getDefaultMessage());
                 });
         return new ResponseEntity<>(errorsMap, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<String> resourceNotFoundExceptionHandler(ResourceNotFoundException ex) {
+        String message = ex.getMessage();
+        return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+
     }
 }

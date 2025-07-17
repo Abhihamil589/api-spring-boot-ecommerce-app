@@ -1,17 +1,16 @@
 package com.abhihamil.ecommerce.service;
 
-import com.abhihamil.ecommerce.model.Category;
+import com.abhihamil.ecommerce.payload.CategoryDTO;
+import com.abhihamil.ecommerce.payload.CategoryResponse;
 import org.springframework.web.bind.annotation.RequestBody;
-
-import java.util.List;
 
 public interface CategoryService {
 
-    List<Category> getAllCategories();
+    CategoryResponse getAllCategories();
 
-    void createCategory(@RequestBody Category category);
+    CategoryDTO createCategory(@RequestBody CategoryDTO categoryDTO);
 
-    String deleteCategory(Long categoryId);
+    CategoryDTO deleteCategory(Long categoryId);
 
-    Category updateCategory(Category category, Long categoryId);
+    CategoryDTO updateCategory(CategoryDTO categoryDTO, Long categoryId);
 }
