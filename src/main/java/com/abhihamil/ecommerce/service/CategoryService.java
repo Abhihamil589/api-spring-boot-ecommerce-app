@@ -6,11 +6,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 public interface CategoryService {
 
-    CategoryResponse getAllCategories();
-
     CategoryDTO createCategory(@RequestBody CategoryDTO categoryDTO);
 
     CategoryDTO deleteCategory(Long categoryId);
 
     CategoryDTO updateCategory(CategoryDTO categoryDTO, Long categoryId);
+
+    CategoryResponse getAllCategories(Integer pageNo, Integer pageSize, String sortBy, String sortOrder);
 }

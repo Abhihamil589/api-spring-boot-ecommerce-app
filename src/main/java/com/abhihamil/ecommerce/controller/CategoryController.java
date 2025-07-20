@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static com.abhihamil.ecommerce.config.AppConstant.*;
+
 @RestController
 @RequestMapping("/api")
 public class CategoryController {
@@ -18,8 +20,13 @@ public class CategoryController {
 
 
     @GetMapping("/public/categories")
-    public ResponseEntity<CategoryResponse> getAllCategories() {
-        CategoryResponse categories = categoryService.getAllCategories();
+    public ResponseEntity<CategoryResponse> getAllCategories(
+            @RequestParam(name = "pageNo", required = false, defaultValue = PAGE_NO) Integer pageNo,
+            @RequestParam(name = "pageSize", required = false, defaultValue = PAGE_SIZE) Integer pageSize,
+            @RequestParam(name = "sortBy", required = false, defaultValue = SORT_BY) String sortBy,
+            @RequestParam(name = "sortOrder", required = false, defaultValue = SORT_ORDER) String sortOrder) {
+
+        CategoryResponse categories = categoryService.getAllCategories(pageNo, pageSize, sortBy, sortOrder);
         return new ResponseEntity<>(categories, HttpStatus.OK);
     }
 

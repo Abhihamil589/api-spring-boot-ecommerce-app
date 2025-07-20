@@ -7,6 +7,10 @@ import com.abhihamil.ecommerce.payload.CategoryResponse;
 import com.abhihamil.ecommerce.repository.CategoryRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,9 +25,16 @@ public class CategoryServiceImpl implements CategoryService {
     private ModelMapper modelMapper;
 
     @Override
-    public CategoryResponse getAllCategories() {
+    public CategoryResponse getAllCategories(Integer pageNo, Integer pageSize, String sortBy, String sortOrder) {
 
-        List<Category> categories = categoryRepository.findAll();
+        Sort sort = sortOrder.equalsIgnoreCase("asc")
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+        Page<Category> pageCategories = categoryRepository.findAll(pageable);
+
+        List<Category> categories = pageCategories.getContent();
         List<CategoryDTO> categoryDTOList = categories.stream()
                 .map(category -> modelMapper.map(category, CategoryDTO.class))
                 .toList();
@@ -38,7 +49,12 @@ public class CategoryServiceImpl implements CategoryService {
         });
         */
 
+        categoryResponse.setPageNumber(pageCategories.getNumber());
+        categoryResponse.setPageSize(pageCategories.getSize());
         categoryResponse.setCategories(categoryDTOList);
+        categoryResponse.setLastPage(pageCategories.isLast());
+        categoryResponse.setTotalPages(pageCategories.getTotalPages());
+        categoryResponse.setTotalElements(pageCategories.getTotalElements());
 
         return categoryResponse;
     }
